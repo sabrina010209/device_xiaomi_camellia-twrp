@@ -15,8 +15,8 @@
 //
 
 cc_library_shared {
-    name: "android.hardware.boot@1.1-mtkimpl",
-    stem: "android.hardware.boot@1.0-impl-1.1-mtkimpl",
+    name: "android.hardware.boot@1.2-mtkimpl",
+    stem: "android.hardware.boot@1.0-impl-1.2-mtkimpl",
     defaults: [
         "hidl_defaults",
         "libboot_control_defaults",
@@ -26,8 +26,6 @@ cc_library_shared {
     recovery_available: true,
     srcs: ["BootControl.cpp", "boot_region_control.cpp"],
 
-    header_libs: ["device_kernel_headers"],
-
     shared_libs: [
         "liblog",
         "libhidlbase",
@@ -35,6 +33,7 @@ cc_library_shared {
         "libutils",
         "android.hardware.boot@1.0",
         "android.hardware.boot@1.1",
+        "android.hardware.boot@1.2"
     ],
     static_libs: [
         "libboot_control",

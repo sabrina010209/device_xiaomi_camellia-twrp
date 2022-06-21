@@ -24,6 +24,9 @@ PRODUCT_PACKAGES += \
     bootctrl.mt6833 \
     bootctrl.mt6833.recovery
 
+PRODUCT_PACKAGES_DEBUG += \
+    bootctl
+
 # Update Engine
 PRODUCT_PACKAGES += \
     update_engine \
