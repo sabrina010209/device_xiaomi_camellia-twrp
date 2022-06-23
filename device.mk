@@ -25,7 +25,7 @@ PRODUCT_PACKAGES += \
     bootctrl.mt6833.recovery
 
 PRODUCT_PACKAGES_DEBUG += \
-    bootctl
+    bootctrl
 
 # Update Engine
 PRODUCT_PACKAGES += \
@@ -64,6 +64,10 @@ RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster41.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
 
+# MTK PlPath Utils
+PRODUCT_PACKAGES += \
+    mtk_plpath_utils.recovery
+
 # USB
 PRODUCT_SYSTEM_PROPERTIES += \
     ro.sys.usb.storage.type=mtp
@@ -73,3 +77,4 @@ PRODUCT_TARGET_VNDK_VERSION := 31
 
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 30
+
