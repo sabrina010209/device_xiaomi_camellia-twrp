@@ -6,6 +6,9 @@
 
 DEVICE_PATH := device/xiaomi/camellia
 
+# For building with minimal manifest
+ALLOW_MISSING_DEPENDENCIES := true
+
 # A/B
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS += \
