@@ -58,6 +58,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_VENDOR_PROPERTIES += \
     ro.hardware.gatekeeper=beanpod
 
+# Health
+PRODUCT_PACKAGES += \
+   android.hardware.health@2.1-impl \
+   android.hardware.health@2.1-service
+
 # Keymaster
 TARGET_RECOVERY_DEVICE_MODULES += \
     libkeymaster4 \
