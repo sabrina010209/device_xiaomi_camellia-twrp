@@ -107,6 +107,12 @@ TW_NO_FASTBOOT_BOOT := true
 TARGET_USES_LOGD := true
 TWRP_INCLUDE_LOGCAT := true
 
+# Crypto
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_PREPARE_DATA_MEDIA_EARLY := true
+
 # Device
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_DEFAULT_BRIGHTNESS := 1400
