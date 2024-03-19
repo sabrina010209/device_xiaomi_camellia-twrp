@@ -46,6 +46,12 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 ENABLE_VIRTUAL_AB := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 
+# TEE
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.vendor.mtk_microtrust_tee_support=1 \
+    ro.vendor.mtk_svp_on_mtee_support=1 \
+    ro.vendor.mtk_tee_gp_support=1
+
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 31
 
