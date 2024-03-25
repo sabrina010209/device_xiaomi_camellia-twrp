@@ -1,3 +1,7 @@
+<!--
+    Input:
+        manifest.xml
+-->
 <manifest version="4.0" type="framework">
     <hal format="hidl">
         <name>android.frameworks.displayservice</name>

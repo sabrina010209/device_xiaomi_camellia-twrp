@@ -1,9 +1,32 @@
+import /init.microtrust.rc
+
 on init
     setprop sys.usb.configfs 1
     setprop sys.usb.ffs.aio_compat 1
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw:/system/lib64/hw
 
-on fs
+    # Support A/B feature for EMMC and UFS boot region
+    symlink /dev/block/sda /dev/block/mmcblk0boot0
+    symlink /dev/block/sdb /dev/block/mmcblk0boot1
+    symlink /dev/block/mmcblk0boot0 /dev/block/platform/bootdevice/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/platform/bootdevice/by-name/preloader_b
+
+    # Support A/B feature for combo emmc and ufs OTA update
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/platform/bootdevice/by-name/preloader_emmc_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/platform/bootdevice/by-name/preloader_emmc_b
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/platform/bootdevice/by-name/preloader_ufs_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/platform/bootdevice/by-name/preloader_ufs_b
+
+    # Support A/B feature for combo emmc and ufs OTA update
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/by-name/preloader_emmc_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
+    symlink /dev/block/platform/bootdevice/by-name/preloader_a /dev/block/by-name/preloader_ufs_a
+    symlink /dev/block/platform/bootdevice/by-name/preloader_b /dev/block/by-name/preloader_ufs_b
+
+    exec u:r:update_engine:s0 root root -- /system/bin/mtk_plpath_utils
+    start mtk.plpath.utils.link
+
+on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
     install_keyring
 
 on boot
@@ -15,48 +38,50 @@ on fs && property:ro.debuggable=0
     # set charging free due to it wait for USB activation
     start adbd
 
-on property:hwservicemanager.ready=true
-    start teei_daemon
-    start keymaster-4-1-beanpod
-    start gatekeeper-1-0
-
-on property:ro.crypto.state=unsupported
-    stop teei_daemon
-    stop keymaster-4-1-beanpod
-    stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
-on property:ro.crypto.state=unencrypted
-    stop teei_daemon
-    stop keymaster-4-1-beanpod
-    stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
-on property:twrp.decrypt.done=true
-    stop teei_daemon
-    stop keymaster-4-1-beanpod
-    stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
-service keystore_auth /system/bin/keystore_auth
+service mtk.plpath.utils.link /system/bin/mtk_plpath_utils
+    class main
+    user root
+    group root system
+    disabled
     oneshot
-    user system
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
+    interface android.hardware.gatekeeper@1.0::IGatekeeper default
+    user root
     group root
     disabled
     seclabel u:r:recovery:s0
 
-service keystore /system/bin/keystore /tmp/misc/keystore
-    user root
-    group root drmrpc readproc log
-    disabled
-    seclabel u:r:recovery:s0
-
-service keymaster-4-1-beanpod /vendor/bin/hw/android.hardware.keymaster@4.1-service.beanpod
+service keymaster-4-1 /system/bin/android.hardware.keymaster@4.1-service.beanpod
+    interface android.hardware.keymaster@4.0::IKeymasterDevice default
+    interface android.hardware.keymaster@4.1::IKeymasterDevice default
     user root
     group root drmrpc
-    oneshot    
     disabled
+    oneshot
     seclabel u:r:recovery:s0
+
+on property:vendor.sys.listener.registered=true
+    start gatekeeper-1-0
+    start keymaster-4-1
+   
+on property:ro.crypto.state=unsupported
+    stop teei_daemon
+    stop keymaster-4-1
+    stop gatekeeper-1-0
+    
+on property:ro.crypto.state=unencrypted
+    stop teei_daemon
+    stop keymaster-4-1
+    stop gatekeeper-1-0
+        
+on property:twrp.all.users.decrypted=true
+    stop teei_daemon
+    stop keymaster-4-1
+    stop gatekeeper-1-0
+   
+on boot
+    start boot-hal-1-2
+    start health-hal-2-1
+    start vibrator-fleur
