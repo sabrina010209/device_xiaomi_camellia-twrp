@@ -61,6 +61,10 @@ RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster41.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
 
+# USB
+PRODUCT_SYSTEM_PROPERTIES += \
+    ro.sys.usb.storage.type=mtp
+
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 31
 
