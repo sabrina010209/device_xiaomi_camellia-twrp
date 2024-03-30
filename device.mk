@@ -25,16 +25,14 @@ PRODUCT_PACKAGES += \
     bootctrl.mt6833.recovery
 
 PRODUCT_PACKAGES_DEBUG += \
-    bootctrl
+    bootctrl \
+    update_engine_client
 
 # Update Engine
 PRODUCT_PACKAGES += \
     update_engine \
     update_engine_sideload \
     update_verifier
-
-PRODUCT_PACKAGES_DEBUG += \
-    update_engine_client
 
 # Fastbootd
 PRODUCT_PACKAGES += \
