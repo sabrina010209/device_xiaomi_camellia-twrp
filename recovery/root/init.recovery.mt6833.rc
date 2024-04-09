@@ -38,6 +38,12 @@ on fs && property:ro.debuggable=0
     # set charging free due to it wait for USB activation
     start adbd
 
+service vibrator-mediatek /system/bin/hw/android.hardware.vibrator-service.mediatek
+    user root
+    group root
+    class hal
+    seclabel u:r:recovery:s0
+
 service mtk.plpath.utils.link /system/bin/mtk_plpath_utils
     class main
     user root
@@ -84,4 +90,4 @@ on property:twrp.all.users.decrypted=true
 on boot
     start boot-hal-1-2
     start health-hal-2-1
-    start vibrator-fleur
+    start vibrator-mediatek
